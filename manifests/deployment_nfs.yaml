@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
     name: demo-app
 spec:
-    replicas: 1
+    replicas: 2
     selector:
       matchLabels:
         app: demo-app
@@ -12,8 +12,15 @@ spec:
         labels:
           app: demo-app
       spec:
+        volumes:
+          - name: nfs-nginx
+            persistentVolumeClaim:
+              claimName: nfs-pvc
         containers:
           - name: nginx
             image: nginx:latest
+            volumeMounts:
+             - name: nfs-nginx
+               mountPath: /usr/share/nginx/html  
             ports:
               - containerPort: 80
